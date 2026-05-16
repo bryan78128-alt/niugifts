@@ -9,110 +9,117 @@
   </style>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
-  <script>
-    // Read local backend status from meta tag (set by Cloudflare Function in prod)
-    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  <div id="app">
+    <div style="max-width:560px;margin:100px auto;background:#fff;border-radius:18px;padding:48px 40px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.06);font-family:-apple-system,BlinkMacSystemFont,sans-serif;">
+      <div style="font-size:2rem;margin-bottom:12px;">✦</div>
+      <h1 style="font-size:1.4rem;font-weight:700;margin-bottom:8px;">NiuGifts CMS</h1>
+      <p id="status" style="color:#86868b;font-size:0.9rem;line-height:1.6;">正在加载...</p>
+    </div>
+  </div>
 
-    CMS.init({
-      load_config_file: false,
-      config: {
-        // Local: decap-server proxy (no login)
-        // Production: GitHub OAuth (login with GitHub)
-        ...(isLocal
-          ? { backend: { name: 'proxy', proxy_url: 'http://localhost:8081/api/v1' } }
-          : { backend: { name: 'github', repo: 'bryan78128-alt/niugifts', branch: 'main' } }
-        ),
-        publish_mode: 'editorial_workflow',
-        media_folder: 'public/images/products',
-        public_folder: '/images/products',
-        locale: 'zh',
-        site_url: window.location.origin,
-        display_url: window.location.origin,
-        collections: [
-          {
-            name: 'products_zh', label: '产品 (中文)', label_singular: '产品',
-            folder: 'src/content/products', create: true, slug: '{{id}}',
-            fields: [
-              { label: 'ID', name: 'id', widget: 'string' },
-              { label: '标题', name: 'title', widget: 'string' },
-              { label: '副标题', name: 'subtitle', widget: 'string', required: false },
-              { label: '描述', name: 'description', widget: 'text' },
-              { label: '分类', name: 'category', widget: 'select', options: ['night-light', 'flip-book', 'nixie-clock', 'neon-sign', 'ambient-light'] },
-              { label: '模板', name: 'template', widget: 'select', options: ['image-only', 'slideshow', 'image-center', 'image-left', 'image-right'], default: 'image-only', required: false },
-              { label: '产品图片', name: 'images', widget: 'list', field: { label: '图片', name: 'image', widget: 'image' } },
-              { label: '封面图', name: 'coverImage', widget: 'image' },
-              { label: '起订量', name: 'moq', widget: 'string', required: false },
-              { label: '价格', name: 'priceRange', widget: 'string', required: false },
-              { label: '排序', name: 'order', widget: 'number', default: 0, value_type: 'int' },
-              { label: '发布', name: 'published', widget: 'boolean', default: true },
-              { label: '特点', name: 'features', widget: 'list', required: false, field: { label: '特点', name: 'feature', widget: 'string' } },
-              { label: '规格', name: 'specs', widget: 'list', required: false, fields: [
-                { label: '参数', name: 'label', widget: 'string' },
-                { label: '值', name: 'value', widget: 'string' }
-              ]},
-              { label: '定制选项', name: 'customization', widget: 'list', required: false, field: { label: '选项', name: 'option', widget: 'string' } }
-            ]
-          },
-          {
-            name: 'products_en', label: 'Products (EN)', label_singular: 'Product',
-            folder: 'src/content/products_en', create: true, slug: '{{id}}',
-            fields: [
-              { label: 'ID', name: 'id', widget: 'string' },
-              { label: 'Title', name: 'title', widget: 'string' },
-              { label: 'Subtitle', name: 'subtitle', widget: 'string', required: false },
-              { label: 'Description', name: 'description', widget: 'text' },
-              { label: 'Category', name: 'category', widget: 'select', options: ['night-light', 'flip-book', 'nixie-clock', 'neon-sign', 'ambient-light'] },
-              { label: 'Template', name: 'template', widget: 'select', options: ['image-only', 'slideshow', 'image-center', 'image-left', 'image-right'], default: 'image-only', required: false },
-              { label: 'Images', name: 'images', widget: 'list', field: { label: 'Image', name: 'image', widget: 'image' } },
-              { label: 'Cover Image', name: 'coverImage', widget: 'image' },
-              { label: 'MOQ', name: 'moq', widget: 'string', required: false },
-              { label: 'Price', name: 'priceRange', widget: 'string', required: false },
-              { label: 'Order', name: 'order', widget: 'number', default: 0, value_type: 'int' },
-              { label: 'Published', name: 'published', widget: 'boolean', default: true },
-              { label: 'Features', name: 'features', widget: 'list', required: false, field: { label: 'Feature', name: 'feature', widget: 'string' } },
-              { label: 'Specs', name: 'specs', widget: 'list', required: false, fields: [
-                { label: 'Label', name: 'label', widget: 'string' },
-                { label: 'Value', name: 'value', widget: 'string' }
-              ]},
-              { label: 'Customization', name: 'customization', widget: 'list', required: false, field: { label: 'Option', name: 'option', widget: 'string' } }
-            ]
-          },
-          {
-            name: 'cases_zh', label: '案例 (中文)', label_singular: '案例',
-            folder: 'src/content/cases', create: true, slug: '{{id}}',
-            fields: [
-              { label: 'ID', name: 'id', widget: 'string' },
-              { label: '标题', name: 'title', widget: 'string' },
-              { label: '客户', name: 'client', widget: 'string' },
-              { label: '描述', name: 'description', widget: 'text' },
-              { label: '图片', name: 'images', widget: 'list', field: { label: '图片', name: 'image', widget: 'image' } },
-              { label: '封面图', name: 'coverImage', widget: 'image' },
-              { label: '评价', name: 'testimonial', widget: 'text', required: false },
-              { label: '评价人', name: 'testimonialAuthor', widget: 'string', required: false },
-              { label: '排序', name: 'order', widget: 'number', default: 0, value_type: 'int' },
-              { label: '发布', name: 'published', widget: 'boolean', default: true }
-            ]
-          },
-          {
-            name: 'cases_en', label: 'Cases (EN)', label_singular: 'Case',
-            folder: 'src/content/cases_en', create: true, slug: '{{id}}',
-            fields: [
-              { label: 'ID', name: 'id', widget: 'string' },
-              { label: 'Title', name: 'title', widget: 'string' },
-              { label: 'Client', name: 'client', widget: 'string' },
-              { label: 'Description', name: 'description', widget: 'text' },
-              { label: 'Images', name: 'images', widget: 'list', field: { label: 'Image', name: 'image', widget: 'image' } },
-              { label: 'Cover Image', name: 'coverImage', widget: 'image' },
-              { label: 'Testimonial', name: 'testimonial', widget: 'text', required: false },
-              { label: 'Author', name: 'testimonialAuthor', widget: 'string', required: false },
-              { label: 'Order', name: 'order', widget: 'number', default: 0, value_type: 'int' },
-              { label: 'Published', name: 'published', widget: 'boolean', default: true }
+  <script>
+    const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    const status = document.getElementById('status');
+
+    if (isLocal) {
+      // ── Local: load Decap CMS ──
+      loadCMS();
+    } else {
+      // ── Production: need GitHub OAuth setup ──
+      status.innerHTML = '生产环境需要配置 GitHub OAuth。<br><br>'
+        + '<b>配置方法：</b><br><br>'
+        + '1. 打开 github.com/settings/developers<br>'
+        + '2. 点 New OAuth App<br>'
+        + '3. Homepage URL: <code>' + location.origin + '</code><br>'
+        + '4. Callback URL: <code>' + location.origin + '/api/callback</code><br>'
+        + '5. 创建后将 Client ID 和 Secret 发给开发者<br><br>'
+        + '完成后刷新本页即可登录 GitHub 编辑内容。';
+    }
+
+    function loadCMS() {
+      status.textContent = '加载 CMS...';
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/decap-cms@^3/dist/decap-cms.js';
+      script.onload = () => {
+        CMS.init({
+          load_config_file: false,
+          config: {
+            backend: { name: 'proxy', proxy_url: 'http://localhost:8081/api/v1' },
+            publish_mode: 'editorial_workflow',
+            media_folder: 'public/images/products',
+            public_folder: '/images/products',
+            locale: 'zh',
+            site_url: location.origin,
+            collections: [
+              { name:'products_zh', label:'产品 (中文)', folder:'src/content/products', create:true, slug:'{{id}}',
+                fields:[
+                  {label:'ID',name:'id',widget:'string'},
+                  {label:'标题',name:'title',widget:'string'},
+                  {label:'副标题',name:'subtitle',widget:'string',required:false},
+                  {label:'描述',name:'description',widget:'text'},
+                  {label:'分类',name:'category',widget:'select',options:['night-light','flip-book','nixie-clock','neon-sign','ambient-light']},
+                  {label:'模板',name:'template',widget:'select',options:['image-only','slideshow','image-center','image-left','image-right'],default:'image-only',required:false},
+                  {label:'产品图片',name:'images',required:false,widget:'list',field:{label:'图片',name:'image',widget:'image'}},
+                  {label:'封面图',name:'coverImage',widget:'image'},
+                  {label:'起订量',name:'moq',widget:'string',required:false},
+                  {label:'价格',name:'priceRange',widget:'string',required:false},
+                  {label:'排序',name:'order',widget:'number',default:0,value_type:'int'},
+                  {label:'发布',name:'published',widget:'boolean',default:true},
+                  {label:'特点',name:'features',required:false,widget:'list',field:{label:'特点',name:'feature',widget:'string'}},
+                  {label:'规格',name:'specs',required:false,widget:'list',fields:[{label:'参数',name:'label',widget:'string'},{label:'值',name:'value',widget:'string'}]},
+                  {label:'定制',name:'customization',required:false,widget:'list',field:{label:'选项',name:'option',widget:'string'}}
+                ]
+              },
+              { name:'products_en', label:'Products (EN)', folder:'src/content/products_en', create:true, slug:'{{id}}',
+                fields:[
+                  {label:'ID',name:'id',widget:'string'},
+                  {label:'Title',name:'title',widget:'string'},
+                  {label:'Subtitle',name:'subtitle',widget:'string',required:false},
+                  {label:'Description',name:'description',widget:'text'},
+                  {label:'Category',name:'category',widget:'select',options:['night-light','flip-book','nixie-clock','neon-sign','ambient-light']},
+                  {label:'Template',name:'template',widget:'select',options:['image-only','slideshow','image-center','image-left','image-right'],default:'image-only',required:false},
+                  {label:'Images',name:'images',required:false,widget:'list',field:{label:'Image',name:'image',widget:'image'}},
+                  {label:'Cover Image',name:'coverImage',widget:'image'},
+                  {label:'MOQ',name:'moq',widget:'string',required:false},
+                  {label:'Price',name:'priceRange',widget:'string',required:false},
+                  {label:'Order',name:'order',widget:'number',default:0,value_type:'int'},
+                  {label:'Published',name:'published',widget:'boolean',default:true},
+                  {label:'Features',name:'features',required:false,widget:'list',field:{label:'Feature',name:'feature',widget:'string'}},
+                  {label:'Specs',name:'specs',required:false,widget:'list',fields:[{label:'Label',name:'label',widget:'string'},{label:'Value',name:'value',widget:'string'}]},
+                  {label:'Customize',name:'customization',required:false,widget:'list',field:{label:'Option',name:'option',widget:'string'}}
+                ]
+              },
+              { name:'cases_zh', label:'案例 (中文)', folder:'src/content/cases', create:true, slug:'{{id}}',
+                fields:[
+                  {label:'ID',name:'id',widget:'string'},{label:'标题',name:'title',widget:'string'},
+                  {label:'客户',name:'client',widget:'string'},{label:'描述',name:'description',widget:'text'},
+                  {label:'图片',name:'images',required:false,widget:'list',field:{label:'图片',name:'image',widget:'image'}},
+                  {label:'封面图',name:'coverImage',widget:'image'},
+                  {label:'评价',name:'testimonial',required:false,widget:'text'},
+                  {label:'评价人',name:'testimonialAuthor',required:false,widget:'string'},
+                  {label:'排序',name:'order',widget:'number',default:0,value_type:'int'},
+                  {label:'发布',name:'published',widget:'boolean',default:true}
+                ]
+              },
+              { name:'cases_en', label:'Cases (EN)', folder:'src/content/cases_en', create:true, slug:'{{id}}',
+                fields:[
+                  {label:'ID',name:'id',widget:'string'},{label:'Title',name:'title',widget:'string'},
+                  {label:'Client',name:'client',widget:'string'},{label:'Description',name:'description',widget:'text'},
+                  {label:'Images',name:'images',required:false,widget:'list',field:{label:'Image',name:'image',widget:'image'}},
+                  {label:'Cover Image',name:'coverImage',widget:'image'},
+                  {label:'Testimonial',name:'testimonial',required:false,widget:'text'},
+                  {label:'Author',name:'testimonialAuthor',required:false,widget:'string'},
+                  {label:'Order',name:'order',widget:'number',default:0,value_type:'int'},
+                  {label:'Published',name:'published',widget:'boolean',default:true}
+                ]
+              }
             ]
           }
-        ]
-      }
-    });
+        });
+        document.getElementById('app').innerHTML = '';
+      };
+      document.body.appendChild(script);
+    }
   </script>
 </body>
 </html>
