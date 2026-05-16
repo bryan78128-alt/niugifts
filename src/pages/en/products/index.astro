@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ProductCard from '../../../components/ProductCard.astro';
+import { getCollection } from 'astro:content';
+import { useTranslations } from '../../../i18n/utils';
+import '../../../styles/products.css';
+
+const lang = 'en';
+const t = useTranslations(lang);
+
+const allProducts = (await getCollection('products_en'))
+  .filter(p => p.data.published)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const categories = [
+  { id: 'all', label: t('products.all') },
+  { id: 'night-light', label: t('products.categories.night-light') },
+  { id: 'flip-book', label: t('products.categories.flip-book') },
+  { id: 'nixie-clock', label: t('products.categories.nixie-clock') },
+  { id: 'neon-sign', label: t('products.categories.neon-sign') },
+  { id: 'ambient-light', label: t('products.categories.ambient-light') },
+];
+
+const currentCategory = Astro.url.searchParams.get('category') || 'all';
+const filtered = currentCategory === 'all'
+  ? allProducts
+  : allProducts.filter(p => p.data.category === currentCategory);
+---
+
+<BaseLayout headerSolid title={`Products — NiuGifts`} description={t('products.subtitle')} lang="en">
+  <section class="section" style="padding-top: 5rem;">
+    <div class="container">
+      <div class="section-header">
+        <h1 class="section-title">{t('products.title')}</h1>
+        <p class="section-subtitle" style="margin:0 auto;">{t('products.subtitle')}</p>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:var(--space-md);margin-bottom:var(--space-xl);padding-bottom:var(--space-xl);border-bottom:1px solid var(--color-border-light);">
+        <form action="/en/search" method="GET" style="flex-shrink:0;">
+          <div class="search-bar" style="width:220px;">
+            <span class="search-icon">🔍</span>
+            <input type="search" name="q" class="search-input" style="width:100%;" placeholder={t('products.search_placeholder')} />
+          </div>
+        </form>
+        <div class="filter-bar">
+        {categories.map(cat => (
+          <a href={cat.id === 'all' ? '/en/products' : `/en/products?category=${cat.id}`} class={`filter-btn ${currentCategory === cat.id ? 'active' : ''}`}>{cat.label}</a>
+        ))}
+      </div>
+
+      {filtered.length > 0 ? (
+        <div class="grid-auto">
+          {filtered.map(product => (
+            <ProductCard id={product.data.id} title={product.data.title} description={product.data.description} category={product.data.category} coverImage={product.data.coverImage} moq={product.data.moq} />
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state">
+          <p>{t('products.no_results')}</p>
+          <a href="/en/products" class="btn btn-outline" style="margin-top:var(--space-md);">{t('products.all')}</a>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

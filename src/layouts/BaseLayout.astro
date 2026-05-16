@@ -1,0 +1,224 @@
+---
+import '../styles/global.css';
+import '../styles/layout.css';
+import { getLang, useTranslations, localizedPath, type Lang } from '../i18n/utils';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  lang?: Lang;
+  headerSolid?: boolean;
+  ogImage?: string;
+  schema?: string;
+}
+
+const headerSolid = Astro.props.headerSolid ?? false;
+
+const { title, description } = Astro.props;
+const lang = Astro.props.lang || getLang(Astro.url);
+const t = useTranslations(lang);
+const pageTitle = title || t('site.title');
+const pageDesc = description || t('site.description');
+const currentPath = Astro.url.pathname;
+
+// Canonical base
+const siteUrl = 'https://niugifts.com';
+const canonical = `${siteUrl}${currentPath}`;
+const ogImage = Astro.props.ogImage || `${siteUrl}/images/og-default.jpg`;
+
+// Alternate language
+const altLang = lang === 'en' ? 'zh' : 'en';
+const altPath = lang === 'en' ? currentPath.replace('/en/', '/').replace('/en', '/') : `/en${currentPath}`;
+const altUrl = `${siteUrl}${altPath}`;
+
+function isActive(path: string): boolean {
+  return currentPath === path || currentPath.startsWith(path + '/');
+}
+---
+
+<!doctype html>
+<html lang={lang === 'en' ? 'en' : 'zh-CN'}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={pageDesc} />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Canonical & Alternate -->
+  <link rel="canonical" href={canonical} />
+  <link rel="alternate" hreflang={lang === 'en' ? 'en' : 'zh-CN'} href={canonical} />
+  <link rel="alternate" hreflang={lang === 'en' ? 'zh-CN' : 'en'} href={altUrl} />
+  <link rel="alternate" hreflang="x-default" href={`${siteUrl}/`} />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={pageDesc} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'zh_CN'} />
+  <meta property="og:site_name" content="NiuGifts — 牛礼创意" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={pageTitle} />
+  <meta name="twitter:description" content={pageDesc} />
+  <meta name="twitter:image" content={ogImage} />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>html{scroll-behavior:smooth;}</style>
+
+  <!-- Schema: Organization -->
+  <script type="application/ld+json" set:html={`{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "NiuGifts",
+    "alternateName": "牛礼创意",
+    "url": "${siteUrl}",
+    "description": "${t('site.description')}",
+    "telephone": "+86-17770789050",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "CN",
+      "addressLocality": "Guangzhou"
+    },
+    "sameAs": ["https://niugifts.1688.com"]
+  }`}>
+  </script>
+
+  {Astro.props.schema && <script type="application/ld+json" set:html={Astro.props.schema} />}
+</head>
+<body>
+  <!-- Header -->
+  <header class={`header${headerSolid ? ' solid' : ''}`} id="header">
+    <div class="container header-inner">
+      <a href={lang === 'en' ? '/en' : '/'} class="header-logo">
+        <span class="logo-accent">✦</span>
+        Niu<span class="logo-accent">Gifts</span>
+      </a>
+
+      <nav class="header-nav" id="mainNav">
+        <a href={lang === 'en' ? '/en' : '/'} class={isActive(lang === 'en' ? '/en' : '/') && currentPath !== '/en/products' && currentPath !== '/en/cases' ? 'active' : ''}>{t('nav.home')}</a>
+        <a href={localizedPath(Astro.url, '/products')} class={isActive(localizedPath(Astro.url, '/products')) ? 'active' : ''}>{t('nav.products')}</a>
+        <a href={localizedPath(Astro.url, '/cases')} class={isActive(localizedPath(Astro.url, '/cases')) ? 'active' : ''}>{t('nav.cases')}</a>
+        <a href={localizedPath(Astro.url, '/about')} class={isActive(localizedPath(Astro.url, '/about')) ? 'active' : ''}>{t('nav.about')}</a>
+        <a href={localizedPath(Astro.url, '/contact')} class={isActive(localizedPath(Astro.url, '/contact')) ? 'active' : ''}>{t('nav.contact')}</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href={lang === 'en' ? '/zh' : '/en'} class="lang-toggle">
+          <span class={lang === 'zh' ? 'active' : ''}>中</span>
+          <span class="separator">/</span>
+          <span class={lang === 'en' ? 'active' : ''}>EN</span>
+        </a>
+        <button class="mobile-menu-btn" id="menuBtn" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <slot />
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href={lang === 'en' ? '/en' : '/'} class="header-logo">
+            <span class="logo-accent">✦</span>
+            Niu<span class="logo-accent">Gifts</span>
+          </a>
+          <p>{t('footer.brand_desc')}</p>
+        </div>
+
+        <div>
+          <h4>{t('footer.nav_title')}</h4>
+          <ul class="footer-links">
+            <li><a href={lang === 'en' ? '/en' : '/'}>{t('nav.home')}</a></li>
+            <li><a href={localizedPath(Astro.url, '/products')}>{t('nav.products')}</a></li>
+            <li><a href={localizedPath(Astro.url, '/cases')}>{t('nav.cases')}</a></li>
+            <li><a href={localizedPath(Astro.url, '/about')}>{t('nav.about')}</a></li>
+            <li><a href={localizedPath(Astro.url, '/contact')}>{t('nav.contact')}</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>{t('footer.products_title')}</h4>
+          <ul class="footer-links">
+            <li><a href={`${localizedPath(Astro.url, '/products')}?category=night-light`}>{t('products.categories.night-light')}</a></li>
+            <li><a href={`${localizedPath(Astro.url, '/products')}?category=flip-book`}>{t('products.categories.flip-book')}</a></li>
+            <li><a href={`${localizedPath(Astro.url, '/products')}?category=nixie-clock`}>{t('products.categories.nixie-clock')}</a></li>
+            <li><a href={`${localizedPath(Astro.url, '/products')}?category=neon-sign`}>{t('products.categories.neon-sign')}</a></li>
+            <li><a href={`${localizedPath(Astro.url, '/products')}?category=ambient-light`}>{t('products.categories.ambient-light')}</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>{t('footer.contact_title')}</h4>
+          <div class="footer-contact-item">
+            <strong>{t('contact.wechat')}:</strong>
+            <span>17770789050</span>
+          </div>
+          <div class="footer-contact-item">
+            <strong>{t('contact.phone')}:</strong>
+            <span>17770789050</span>
+          </div>
+          <div class="footer-contact-item">
+            <strong>{t('contact.address')}:</strong>
+            <span>{t('contact.address_detail')}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>{t('footer.copyright')}</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile menu toggle -->
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const mainNav = document.getElementById('mainNav');
+
+    menuBtn?.addEventListener('click', () => {
+      menuBtn.classList.toggle('open');
+      mainNav?.classList.toggle('open');
+    });
+
+    // Close menu on nav link click
+    mainNav?.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        menuBtn?.classList.remove('open');
+        mainNav?.classList.remove('open');
+      });
+    });
+
+    // Header scroll effect
+    let lastScroll = 0;
+    const header = document.getElementById('header');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        header?.classList.add('scrolled');
+      } else {
+        header?.classList.remove('scrolled');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getLang, useTranslations, localizedPath } from '../i18n/utils';
+import '../styles/home.css';
+
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+
+const allProducts = (await getCollection('products'))
+  .filter(p => p.data.published)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const cases = (await getCollection('cases'))
+  .filter(c => c.data.published)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 2);
+
+// Group products by category, ordered by category product count
+const categoryOrder = ['night-light', 'flip-book', 'nixie-clock', 'neon-sign', 'ambient-light'];
+const categoryIcons: Record<string, string> = {
+  'night-light': '💡',
+  'flip-book': '📖',
+  'nixie-clock': '🕰️',
+  'neon-sign': '✨',
+  'ambient-light': '🌌',
+};
+
+const categories = categoryOrder.map(id => {
+  const items = allProducts.filter(p => p.data.category === id);
+  return { id, items, icon: categoryIcons[id] || '', count: allProducts.filter(p => p.data.category === id).length };
+}).filter(c => c.items.length > 0);
+---
+
+<BaseLayout lang={lang}>
+  <!-- ═══ 品类全屏展示 ═══ -->
+  {categories.map((cat, ci) => {
+    const products = cat.items;
+    const isSlideshow = products.length > 1;
+    const sectionId = `cat-${cat.id}`;
+    return (
+      <section class="product-feature" data-template={isSlideshow ? 'slideshow' : 'image-only'} id={sectionId}>
+        <div class="feature-inner">
+          <a class="feature-image" href={`${localizedPath(Astro.url, '/products')}?category=${cat.id}`}>
+            {isSlideshow ? (
+              products.map((p, i) => (
+                <img
+                  class={`slideshow-img${i === 0 ? ' active' : ''}`}
+                  src={p.data.coverImage}
+                  alt={t(`products.categories.${cat.id}`)}
+                  loading={ci === 0 && i === 0 ? 'eager' : 'lazy'}
+                />
+              ))
+            ) : (
+              <img
+                class="slideshow-img active"
+                src={products[0].data.coverImage}
+                alt={t(`products.categories.${cat.id}`)}
+                loading={ci === 0 ? 'eager' : 'lazy'}
+              />
+            )}
+            {isSlideshow && (
+              <div class="slideshow-dots" id={`dots-${sectionId}`}>
+                {products.map((_, i) => (
+                  <button class={`slideshow-dot${i === 0 ? ' active' : ''}`} data-index={i}></button>
+                ))}
+              </div>
+            )}
+          </a>
+        </div>
+      </section>
+    );
+  })}
+
+  <!-- ═══ Stats ═══ -->
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="stat-number">20+</div>
+      <div class="stat-label">{t('home.stats_products')}</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">500+</div>
+      <div class="stat-label">{t('home.stats_clients')}</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">10</div>
+      <div class="stat-label">{t('home.stats_years')}</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">98%</div>
+      <div class="stat-label">{t('home.stats_delivery')}</div>
+    </div>
+  </div>
+
+  <!-- ═══ Categories ═══ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">{t('home.categories_title')}</h2>
+        <p class="section-subtitle" style="margin:0 auto;">{t('home.categories_subtitle')}</p>
+      </div>
+      <div class="category-grid">
+        {categories.map(cat => (
+          <a href={`${localizedPath(Astro.url, '/products')}?category=${cat.id}`} class="category-card">
+            <div class="category-icon">{cat.icon}</div>
+            <h3>{t(`products.categories.${cat.id}`)}</h3>
+            <span class="category-count">{cat.count} {t('home.stats_products')}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Case Studies ═══ -->
+  {cases.length > 0 && (
+    <section class="section section-gray">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">{t('home.cases_title')}</h2>
+          <p class="section-subtitle" style="margin:0 auto;">{t('home.cases_subtitle')}</p>
+        </div>
+        <div class="cases-grid">
+          {cases.map(c => (
+            <article class="case-card-home">
+              <a href={localizedPath(Astro.url, `/cases/${c.data.id}`)}>
+                <div class="case-card-image">
+                  <img src={c.data.coverImage} alt={c.data.title} loading="lazy" />
+                </div>
+                <div class="case-card-body">
+                  <span class="case-card-client">{c.data.client}</span>
+                  <h3>{c.data.title}</h3>
+                  <p>{c.data.description}</p>
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+        <div class="view-all-wrap">
+          <a href={localizedPath(Astro.url, '/cases')} class="btn btn-outline">{t('home.view_all')} →</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ═══ Trust ═══ -->
+  <section class="section section-gray">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">{t('home.trust_title')}</h2>
+        <p class="section-subtitle" style="margin:0 auto;">{t('home.trust_subtitle')}</p>
+      </div>
+      <div class="trust-grid">
+        <div class="trust-item">
+          <div class="trust-icon-wrap">🏭</div>
+          <h3>{t('home.trust_quality')}</h3>
+          <p>{t('home.trust_quality_desc')}</p>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon-wrap">🎨</div>
+          <h3>{t('home.trust_custom')}</h3>
+          <p>{t('home.trust_custom_desc')}</p>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon-wrap">✏️</div>
+          <h3>{t('home.trust_design')}</h3>
+          <p>{t('home.trust_design_desc')}</p>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon-wrap">🤝</div>
+          <h3>{t('home.trust_service')}</h3>
+          <p>{t('home.trust_service_desc')}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CTA ═══ -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-section">
+        <h2>{t('home.cta_title')}</h2>
+        <p>{t('home.cta_desc')}</p>
+        <a href={localizedPath(Astro.url, '/contact')} class="btn btn-primary" style="font-size:1.1rem;padding:1rem 2.5rem;">{t('home.cta_btn')}</a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Slideshow for multi-product categories
+    document.querySelectorAll('[data-template="slideshow"]').forEach(section => {
+      const imgs = section.querySelectorAll('.slideshow-img');
+      const dots = section.querySelectorAll('.slideshow-dot');
+      if (imgs.length < 2 || !dots.length) return;
+      let current = 0;
+      const total = imgs.length;
+      let timer;
+      const DELAY = 4000;
+
+      function show(i) {
+        imgs[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = i;
+        imgs[current].classList.add('active');
+        dots[current].classList.add('active');
+      }
+
+      function next() { const n = current + 1 >= total ? 0 : current + 1; show(n); }
+
+      dots.forEach((d, i) => { d.addEventListener('click', () => { show(i); resetTimer(); }); });
+
+      function resetTimer() { clearInterval(timer); timer = setInterval(next, DELAY); }
+
+      timer = setInterval(next, DELAY);
+    });
+  </script>
+</BaseLayout>

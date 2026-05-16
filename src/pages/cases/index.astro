@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CaseCard from '../../components/CaseCard.astro';
+import { getCollection } from 'astro:content';
+import { getLang, useTranslations, localizedPath } from '../../i18n/utils';
+
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+
+const allCases = (await getCollection('cases'))
+  .filter(c => c.data.published)
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout headerSolid title={`${t('cases.title')} — NiuGifts`} description={t('cases.subtitle')} lang={lang}>
+  <section class="section" style="padding-top:5rem;">
+    <div class="container">
+      <div class="section-header">
+        <h1 class="section-title">{t('cases.title')}</h1>
+        <p class="section-subtitle" style="margin:0 auto;">{t('cases.subtitle')}</p>
+      </div>
+      {allCases.length > 0 ? (
+        <div class="cases-grid" style="max-width:900px;margin:0 auto;">
+          {allCases.map(c => (
+            <CaseCard id={c.data.id} title={c.data.title} client={c.data.client} description={c.data.description} coverImage={c.data.coverImage} />
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state"><p style="color:var(--color-text-muted);font-size:1.1rem;">{t('common.loading')}</p></div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

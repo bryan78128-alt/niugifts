@@ -1,0 +1,239 @@
+{
+  "zh": {
+    "site": {
+      "title": "牛礼创意 — 亚克力夜灯礼品定制",
+      "description": "专业亚克力小夜灯定制厂家，支持小批量个性化定制，企业礼品、校园纪念、文创周边一站式服务。"
+    },
+    "nav": {
+      "home": "首页",
+      "products": "产品中心",
+      "cases": "定制案例",
+      "about": "关于我们",
+      "contact": "联系询价"
+    },
+    "home": {
+      "hero_tag": "礼品定制专家",
+      "hero_title": "点亮你的创意",
+      "hero_title_highlight": "定制专属夜灯",
+      "hero_desc": "专业亚克力小夜灯定制，从企业礼品到校园纪念，从文创周边到赛事奖杯，小批量灵活定制，让你的品牌发光。",
+      "hero_cta_primary": "浏览产品",
+      "hero_cta_secondary": "联系询价",
+      "stats_products": "产品款式",
+      "stats_clients": "服务客户",
+      "stats_years": "行业经验",
+      "stats_delivery": "交付率",
+      "categories_title": "产品系列",
+      "categories_subtitle": "多品类创意礼品，满足不同场景的定制需求",
+      "featured_title": "精选产品",
+      "featured_subtitle": "最受欢迎的定制款式",
+      "cases_title": "客户案例",
+      "cases_subtitle": "为知名企业及院校提供定制服务",
+      "trust_title": "为什么选择牛礼",
+      "trust_subtitle": "用实力和品质赢得信赖",
+      "trust_quality": "品质保障",
+      "trust_quality_desc": "自有工厂，严格品控，每一件产品都经过检验",
+      "trust_custom": "灵活定制",
+      "trust_custom_desc": "小批量起订，来图定制，3D渲染免费出效果图",
+      "trust_design": "设计支持",
+      "trust_design_desc": "专业设计团队，从创意到成品一站式服务",
+      "trust_service": "全程服务",
+      "trust_service_desc": "从打样到交付，专人跟进，让你省心省力",
+      "cta_title": "开始你的定制之旅",
+      "cta_desc": "无论企业礼品还是个人定制，我们都能为你实现",
+      "cta_btn": "立即咨询",
+      "view_all": "查看全部",
+      "view_case": "查看案例"
+    },
+    "products": {
+      "title": "产品中心",
+      "subtitle": "多品类创意礼品，满足不同场景定制需求",
+      "all": "全部产品",
+      "search_placeholder": "搜索产品...",
+      "no_results": "没有找到匹配的产品",
+      "moq": "起订量",
+      "inquiry": "立即询价",
+      "details": "查看详情",
+      "features": "产品特点",
+      "specs": "产品规格",
+      "materials": "可选材质",
+      "customization": "定制选项",
+      "related": "相关产品",
+      "categories": {
+        "night-light": "亚克力小夜灯",
+        "flip-book": "翻页图册",
+        "nixie-clock": "拟辉光管时钟",
+        "neon-sign": "电气灯",
+        "ambient-light": "创意氛围灯"
+      }
+    },
+    "cases": {
+      "title": "定制案例",
+      "subtitle": "为企业和机构提供专业定制服务",
+      "client": "客户",
+      "products_used": "定制产品",
+      "testimonial": "客户评价",
+      "more": "更多案例"
+    },
+    "about": {
+      "title": "关于牛礼",
+      "subtitle": "用心做好每一件礼品",
+      "intro": "广州牛礼创意科技有限公司成立于2015年，专注于亚克力夜灯及创意礼品定制领域。公司拥有自主工厂和生产设备，致力于为企业客户提供高品质的礼品定制解决方案。",
+      "equipment_title": "生产设备",
+      "equipment_list": ["激光切割机", "激光打标机", "UV印刷机", "3D渲染设计团队"],
+      "honors": "资质荣誉",
+      "honors_list": ["金牌制造认证", "深度验厂认证", "多项国家专利"]
+    },
+    "contact": {
+      "title": "联系询价",
+      "subtitle": "告诉我们你的需求，我们将在24小时内回复",
+      "form_name": "联系人",
+      "form_company": "公司名称",
+      "form_phone": "联系电话",
+      "form_email": "邮箱",
+      "form_product": "感兴趣的产品",
+      "form_message": "定制需求描述",
+      "form_submit": "提交询价",
+      "form_success": "感谢您的询价！我们将在24小时内与您联系。",
+      "or_contact": "或直接联系我们",
+      "wechat": "微信",
+      "phone": "电话",
+      "address": "地址",
+      "address_detail": "广州市番禺区沙头街西丽工业区丽景路79号三楼"
+    },
+    "footer": {
+      "brand_desc": "专业亚克力夜灯及创意礼品定制厂家，小批量灵活定制，让每一个礼品都与众不同。",
+      "nav_title": "快速导航",
+      "products_title": "产品系列",
+      "contact_title": "联系方式",
+      "copyright": "© 2026 广州牛礼创意科技有限公司 版权所有"
+    },
+    "search": {
+      "title": "搜索结果",
+      "placeholder": "搜索产品...",
+      "no_results": "未找到相关产品",
+      "result_for": "搜索结果"
+    },
+    "common": {
+      "loading": "加载中..."
+    }
+  },
+
+  "en": {
+    "site": {
+      "title": "NiuGifts — Acrylic Night Light Customization",
+      "description": "Professional acrylic night light manufacturer, supporting small-batch custom orders for corporate gifts, campus souvenirs, and creative merchandise."
+    },
+    "nav": {
+      "home": "Home",
+      "products": "Products",
+      "cases": "Case Studies",
+      "about": "About Us",
+      "contact": "Contact"
+    },
+    "home": {
+      "hero_tag": "Gift Customization Expert",
+      "hero_title": "Light Up Your",
+      "hero_title_highlight": "Custom Night Light",
+      "hero_desc": "Professional acrylic night light customization — from corporate gifts to campus souvenirs. Small-batch flexible customization that makes your brand shine.",
+      "hero_cta_primary": "Browse Products",
+      "hero_cta_secondary": "Get a Quote",
+      "stats_products": "Products",
+      "stats_clients": "Clients",
+      "stats_years": "Years Experience",
+      "stats_delivery": "Fulfillment Rate",
+      "categories_title": "Product Lines",
+      "categories_subtitle": "Multi-category creative gifts for every occasion",
+      "featured_title": "Featured Products",
+      "featured_subtitle": "Our most popular custom styles",
+      "cases_title": "Case Studies",
+      "cases_subtitle": "Trusted by leading enterprises and institutions",
+      "trust_title": "Why Choose NiuGifts",
+      "trust_subtitle": "Quality and expertise you can count on",
+      "trust_quality": "Quality Assurance",
+      "trust_quality_desc": "In-house factory with strict quality control on every product",
+      "trust_custom": "Flexible Customization",
+      "trust_custom_desc": "Low MOQ, custom artwork, free 3D rendering preview",
+      "trust_design": "Design Support",
+      "trust_design_desc": "Professional design team, from concept to finished product",
+      "trust_service": "Full Service",
+      "trust_service_desc": "Dedicated support from sampling to delivery",
+      "cta_title": "Start Your Custom Journey",
+      "cta_desc": "Whether corporate gifts or personal orders, we bring your vision to life",
+      "cta_btn": "Contact Us Now",
+      "view_all": "View All",
+      "view_case": "View Case"
+    },
+    "products": {
+      "title": "Products",
+      "subtitle": "Multi-category creative gifts for every need",
+      "all": "All Products",
+      "search_placeholder": "Search products...",
+      "no_results": "No products found",
+      "moq": "MOQ",
+      "inquiry": "Inquiry",
+      "details": "Details",
+      "features": "Features",
+      "specs": "Specifications",
+      "materials": "Materials",
+      "customization": "Customization Options",
+      "related": "Related Products",
+      "categories": {
+        "night-light": "Acrylic Night Lights",
+        "flip-book": "Flip Books",
+        "nixie-clock": "Nixie Tube Clocks",
+        "neon-sign": "Neon Signs",
+        "ambient-light": "Ambient Lights"
+      }
+    },
+    "cases": {
+      "title": "Case Studies",
+      "subtitle": "Professional custom solutions for businesses and institutions",
+      "client": "Client",
+      "products_used": "Products Used",
+      "testimonial": "Testimonial",
+      "more": "More Cases"
+    },
+    "about": {
+      "title": "About NiuGifts",
+      "subtitle": "Crafting every gift with care",
+      "intro": "Founded in 2015, Guangzhou NiuLi Creative Technology Co., Ltd. specializes in acrylic night light and creative gift customization. With our own factory and production equipment, we are committed to providing high-quality custom gift solutions for corporate clients.",
+      "equipment_title": "Production Equipment",
+      "equipment_list": ["Laser Cutters", "Laser Engravers", "UV Printers", "3D Rendering Design Team"],
+      "honors": "Certifications",
+      "honors_list": ["Gold Manufacturing Certification", "Deep Factory Audit", "Multiple National Patents"]
+    },
+    "contact": {
+      "title": "Contact & Inquiry",
+      "subtitle": "Tell us your needs and we'll respond within 24 hours",
+      "form_name": "Name",
+      "form_company": "Company",
+      "form_phone": "Phone",
+      "form_email": "Email",
+      "form_product": "Product of Interest",
+      "form_message": "Custom Requirements",
+      "form_submit": "Submit Inquiry",
+      "form_success": "Thank you! We'll get back to you within 24 hours.",
+      "or_contact": "Or contact us directly",
+      "wechat": "WeChat",
+      "phone": "Phone",
+      "address": "Address",
+      "address_detail": "3F, No.79 Lijing Rd, Xili Industrial Zone, Panyu, Guangzhou"
+    },
+    "footer": {
+      "brand_desc": "Professional acrylic night light and creative gift manufacturer. Small-batch customization that makes every gift unique.",
+      "nav_title": "Quick Links",
+      "products_title": "Products",
+      "contact_title": "Contact",
+      "copyright": "© 2026 Guangzhou NiuLi Creative Technology Co., Ltd. All rights reserved."
+    },
+    "search": {
+      "title": "Search Results",
+      "placeholder": "Search products...",
+      "no_results": "No products found",
+      "result_for": "Search results for"
+    },
+    "common": {
+      "loading": "Loading..."
+    }
+  }
+}

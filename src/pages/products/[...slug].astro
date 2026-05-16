@@ -1,0 +1,162 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { getCollection } from 'astro:content';
+import { getLang, useTranslations, localizedPath } from '../../i18n/utils';
+import '../../styles/products.css';
+
+export async function getStaticPaths() {
+  const products = await getCollection('products');
+  return products.filter(p => p.data.published).map(p => ({
+    params: { slug: p.data.id },
+    props: { product: p },
+  }));
+}
+
+const { product } = Astro.props;
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+const { data } = product;
+const categoryLabel = t(`products.categories.${data.category}`) || data.category;
+
+const relatedProducts = (await getCollection('products'))
+  .filter(p => p.data.published && p.data.id !== data.id)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+
+const siteUrl = 'https://niugifts.com';
+const productUrl = `${siteUrl}${localizedPath(Astro.url, `/products/${data.id}`)}`;
+const productSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: data.title,
+  description: data.description,
+  image: data.images?.map((img: string) => `${siteUrl}${img}`) || [`${siteUrl}${data.coverImage}`],
+  category: categoryLabel,
+  ...(data.moq ? { sku: data.id } : {}),
+  ...(data.priceRange ? { offers: { '@type': 'Offer', price: data.priceRange.replace(/[^0-9.-]/g, ''), priceCurrency: 'CNY', availability: 'https://schema.org/InStock' } } : {}),
+  manufacturer: { '@type': 'Organization', name: 'NiuGifts' }
+});
+const breadSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: t('products.title'), item: `${siteUrl}${localizedPath(Astro.url, '/products')}` },
+    { '@type': 'ListItem', position: 2, name: categoryLabel, item: `${siteUrl}${localizedPath(Astro.url, '/products')}?category=${data.category}` },
+    { '@type': 'ListItem', position: 3, name: data.title }
+  ]
+});
+const combinedSchema = `[${productSchema},${breadSchema}]`;
+---
+
+<BaseLayout headerSolid title={`${data.title} — NiuGifts`} description={data.description} lang={lang} ogImage={data.coverImage} schema={combinedSchema}>
+  <section class="section" style="padding-top: 7rem;">
+    <div class="container">
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <a href={localizedPath(Astro.url, '/products')}>{t('products.title')}</a>
+        <span>/</span><span>{categoryLabel}</span><span>/</span>
+        <span style="color:var(--color-text-primary);">{data.title}</span>
+      </div>
+
+      <!-- ── Top: Gallery + Info ── -->
+      <div class="product-detail">
+        <div class="product-gallery">
+          <div class="product-main-image" id="mainImage">
+            <img src={data.coverImage} alt={data.title} />
+          </div>
+          {data.images.length > 1 && (
+            <div class="product-thumbnails">
+              {data.images.map((img, i) => (
+                <button class={`product-thumb${i === 0 ? ' active' : ''}`} data-src={img}>
+                  <img src={img} alt={`${data.title} ${i + 1}`} loading="lazy" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div class="product-info" style="padding-top:0;">
+          <h1>{data.title}</h1>
+          {data.subtitle && <p class="subtitle">{data.subtitle}</p>}
+
+          <div class="product-description">
+            <p>{data.description}</p>
+          </div>
+
+          {data.specs && data.specs.length > 0 && (
+            <div class="specs-section">
+              <h4>{t('products.specs')}</h4>
+              <table class="specs-table">
+                {data.specs.map(spec => (<tr><td>{spec.label}</td><td>{spec.value}</td></tr>))}
+              </table>
+            </div>
+          )}
+
+          {data.moq && (
+            <div class="product-meta">
+              <span>{t('products.moq')}: <strong>{data.moq}</strong></span>
+              {data.priceRange && <span>参考价格: <strong>{data.priceRange}</strong></span>}
+            </div>
+          )}
+
+          <div class="product-actions">
+            <a href={localizedPath(Astro.url, '/contact')} class="btn btn-primary" style="font-size:1rem;padding:0.85rem 2rem;">{t('products.inquiry')} →</a>
+            <a href={localizedPath(Astro.url, '/products')} class="btn btn-outline">← {t('nav.products')}</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Below: Full details ── -->
+      {(data.features?.length > 0 || data.customization?.length > 0) && (
+        <div class="product-detail-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3xl);">
+            {data.features?.length > 0 && (
+              <div>
+                <h3 style="font-size:1rem;margin-bottom:var(--space-md);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:0.06em;">{t('products.features')}</h3>
+                <ul class="feature-list">
+                  {data.features.map((f: string) => <li>{f}</li>)}
+                </ul>
+              </div>
+            )}
+            {data.customization?.length > 0 && (
+              <div>
+                <h3 style="font-size:1rem;margin-bottom:var(--space-md);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:0.06em;">{t('products.customization')}</h3>
+                <ul class="feature-list">
+                  {data.customization.map((c: string) => <li>{c}</li>)}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  {relatedProducts.length > 0 && (
+    <section class="section section-gray">
+      <div class="container">
+        <div class="section-header"><h2 class="section-title">{t('products.related')}</h2></div>
+        <div class="grid-auto">
+          {relatedProducts.map(p => (
+            <ProductCard id={p.data.id} title={p.data.title} description={p.data.description} category={p.data.category} coverImage={p.data.coverImage} moq={p.data.moq} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<script>
+  const mainImage = document.getElementById('mainImage');
+  document.querySelectorAll('.product-thumb').forEach(thumb => {
+    thumb.addEventListener('click', () => {
+      const src = thumb.dataset.src;
+      if (src && mainImage) {
+        mainImage.innerHTML = `<img src="${src}" alt="" style="width:100%;height:100%;object-fit:cover;" />`;
+      }
+      document.querySelectorAll('.product-thumb').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+    });
+  });
+</script>

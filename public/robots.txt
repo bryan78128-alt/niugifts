@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://niugifts.com/sitemap.xml

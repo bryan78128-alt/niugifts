@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { getCollection } from 'astro:content';
+import { useTranslations } from '../../i18n/utils';
+
+const lang = 'en';
+const t = useTranslations(lang);
+const query = (Astro.url.searchParams.get('q') || '').trim().toLowerCase();
+
+const allProducts = (await getCollection('products_en')).filter(p => p.data.published);
+const results = query
+  ? allProducts.filter(p => {
+      const fields = [p.data.title, p.data.description, p.data.category, ...(p.data.features || [])].join(' ').toLowerCase();
+      return fields.includes(query);
+    }).sort((a, b) => a.data.order - b.data.order)
+  : [];
+---
+
+<BaseLayout headerSolid title={`Search — NiuGifts`} lang="en">
+  <section class="section" style="padding-top:5rem;">
+    <div class="container">
+      <div class="section-header"><h1 class="section-title">{t('search.title')}</h1></div>
+      <div style="text-align:center;margin-bottom:var(--space-2xl);">
+        <form action="/en/search" method="GET" style="display:inline-block;width:100%;max-width:500px;">
+          <div class="search-bar" style="width:100%;">
+            <span class="search-icon">🔍</span>
+            <input type="search" name="q" class="search-input" style="width:100%;padding:0.85rem 1rem 0.85rem 2.75rem;font-size:1rem;" placeholder={t('products.search_placeholder')} value={query} />
+          </div>
+        </form>
+      </div>
+      {query && <p style="text-align:center;color:var(--color-text-secondary);margin-bottom:var(--space-xl);">&ldquo;{query}&rdquo; — {results.length} results</p>}
+      {results.length > 0 ? (
+        <div class="grid-auto">
+          {results.map(product => (
+            <ProductCard id={product.data.id} title={product.data.title} description={product.data.description} category={product.data.category} coverImage={product.data.coverImage} moq={product.data.moq} />
+          ))}
+        </div>
+      ) : query && (
+        <div class="empty-state">
+          <p>{t('search.no_results')}</p>
+          <a href="/en/products" class="btn btn-outline" style="margin-top:var(--space-md);">{t('products.all')}</a>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

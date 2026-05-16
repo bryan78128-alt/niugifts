@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getLang, useTranslations, localizedPath } from '../../i18n/utils';
+
+export async function getStaticPaths() {
+  const cases = await getCollection('cases');
+  return cases.filter(c => c.data.published).map(c => ({
+    params: { slug: c.data.id },
+    props: { caseItem: c },
+  }));
+}
+
+const { caseItem } = Astro.props;
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+const { data } = caseItem;
+---
+
+<BaseLayout headerSolid title={`${data.title} — NiuGifts`} description={data.description} lang={lang}>
+  <section class="section" style="padding-top:7rem;">
+    <div class="container" style="max-width:800px;">
+      <div class="breadcrumb">
+        <a href={localizedPath(Astro.url, '/cases')}>{t('cases.title')}</a>
+        <span>/</span><span style="color:var(--color-text-primary);">{data.title}</span>
+      </div>
+
+      <h1 style="font-size:2rem;font-weight:700;margin-bottom:var(--space-sm);">{data.title}</h1>
+      <p style="color:var(--color-accent);font-weight:500;margin-bottom:var(--space-xl);">{data.client}</p>
+
+      <div style="background:var(--color-bg-secondary);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:var(--space-2xl);">
+        <img
+          src={data.coverImage}
+          alt={data.title}
+          style="width:100%;display:block;"
+        />
+      </div>
+
+      <div style="font-size:0.95rem;line-height:1.8;color:var(--color-text-secondary);">
+        <p style="font-size:1.05rem;color:var(--color-text-primary);margin-bottom:var(--space-lg);">{data.description}</p>
+
+        {data.testimonial && (
+          <blockquote class="testimonial">
+            <p>"{data.testimonial}"</p>
+            {data.testimonialAuthor && <footer>— {data.testimonialAuthor}</footer>}
+          </blockquote>
+        )}
+
+        <div style="display:flex;gap:var(--space-md);margin-top:var(--space-2xl);padding-top:var(--space-2xl);border-top:1px solid var(--color-border-light);">
+          <a href={localizedPath(Astro.url, '/contact')} class="btn btn-primary">{t('contact.form_submit')} →</a>
+          <a href={localizedPath(Astro.url, '/cases')} class="btn btn-outline">← {t('cases.more')}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

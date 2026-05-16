@@ -1,0 +1,37 @@
+---
+import { getLang, useTranslations, localizedPath } from '../i18n/utils';
+
+export interface Props {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  coverImage: string;
+  moq?: string;
+  order?: number;
+}
+
+const { title, description, category, coverImage, moq, id } = Astro.props;
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+const categoryLabel = t(`products.categories.${category}`) || category;
+---
+
+<article class="product-card">
+  <a href={localizedPath(Astro.url, `/products/${id}`)}>
+    <div class="product-card-image">
+      <img
+        src={coverImage}
+        alt={title}
+        loading="lazy"
+      />
+    </div>
+    <div class="product-card-body">
+      <span class="product-card-category">{categoryLabel}</span>
+      <h3>{title}</h3>
+      <div class="product-card-footer">
+        <span class="product-card-link">{t('products.details')} →</span>
+      </div>
+    </div>
+  </a>
+</article>

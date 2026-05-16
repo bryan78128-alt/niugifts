@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getLang, useTranslations } from '../i18n/utils';
+
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+---
+
+<BaseLayout headerSolid title={`${t('about.title')} — NiuGifts`} description={t('about.subtitle')} lang={lang}>
+  <section class="section" style="padding-top: 5rem;">
+    <div class="container" style="max-width: 720px;">
+      <div class="section-header">
+        <h1 class="section-title">{t('about.title')}</h1>
+        <p class="section-subtitle" style="margin: 0 auto;">{t('about.subtitle')}</p>
+      </div>
+
+      <div style="font-size:0.95rem;line-height:1.8;color:var(--color-text-secondary);">
+        <p style="font-size:1.1rem;color:var(--color-text-primary);margin-bottom:var(--space-lg);">
+          {t('about.intro')}
+        </p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-xl);margin:var(--space-2xl) 0;">
+          <div style="background:var(--color-bg-card);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-xl);">
+            <h3 style="font-size:1rem;margin-bottom:var(--space-md);color:var(--color-accent);">🏭 {t('about.equipment_title')}</h3>
+            <ul style="list-style:none;">
+              {t('about.equipment_list').split(',').map((item: string) => (
+                <li style="padding:0.4rem 0;font-size:0.9rem;padding-left:1.25rem;position:relative;">
+                  <span style="position:absolute;left:0;color:var(--color-accent);">✦</span>
+                  {item.trim()}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div style="background:var(--color-bg-card);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-xl);">
+            <h3 style="font-size:1rem;margin-bottom:var(--space-md);color:var(--color-accent);">🏆 {t('about.honors')}</h3>
+            <ul style="list-style:none;">
+              {t('about.honors_list').split(',').map((item: string) => (
+                <li style="padding:0.4rem 0;font-size:0.9rem;padding-left:1.25rem;position:relative;">
+                  <span style="position:absolute;left:0;color:var(--color-accent);">✦</span>
+                  {item.trim()}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div style="margin-top:var(--space-2xl);padding-top:var(--space-2xl);border-top:1px solid var(--color-border);">
+          <h3 style="font-size:1.1rem;margin-bottom:var(--space-md);">定制流程</h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));gap:var(--space-md);">
+            {['💡 提供创意', '🎨 3D渲染出图', '✅ 确认打样', '🏭 批量生产', '🔍 品质检验', '📦 包装发货'].map(step => (
+              <div style="background:var(--color-bg-card);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-lg);text-align:center;font-size:0.9rem;">
+                {step}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

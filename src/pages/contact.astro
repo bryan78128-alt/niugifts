@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getLang, useTranslations } from '../i18n/utils';
+
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+---
+
+<BaseLayout headerSolid title={`${t('contact.title')} — NiuGifts`} description={t('contact.subtitle')} lang={lang}>
+  <section class="section" style="padding-top: 5rem;">
+    <div class="container" style="max-width: 720px;">
+      <div class="section-header">
+        <h1 class="section-title">{t('contact.title')}</h1>
+        <p class="section-subtitle" style="margin: 0 auto;">{t('contact.subtitle')}</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3xl);">
+        <form id="inquiryForm" style="display:flex;flex-direction:column;gap:var(--space-lg);">
+          <div class="form-group">
+            <label class="form-label" for="name">{t('contact.form_name')}</label>
+            <input class="form-input" type="text" id="name" name="name" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="company">{t('contact.form_company')}</label>
+            <input class="form-input" type="text" id="company" name="company" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="phone">{t('contact.form_phone')}</label>
+              <input class="form-input" type="tel" id="phone" name="phone" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="email">{t('contact.form_email')}</label>
+              <input class="form-input" type="email" id="email" name="email" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="product">{t('contact.form_product')}</label>
+            <select class="form-select" id="product" name="product">
+              <option value="">{t('products.all')}</option>
+              <option value="night-light">{t('products.categories.night-light')}</option>
+              <option value="flip-book">{t('products.categories.flip-book')}</option>
+              <option value="nixie-clock">{t('products.categories.nixie-clock')}</option>
+              <option value="neon-sign">{t('products.categories.neon-sign')}</option>
+              <option value="ambient-light">{t('products.categories.ambient-light')}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="message">{t('contact.form_message')}</label>
+            <textarea class="form-textarea" id="message" name="message" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="align-self:flex-start;font-size:1rem;padding:0.85rem 2rem;">
+            {t('contact.form_submit')} →
+          </button>
+          <div id="formSuccess" style="display:none;padding:var(--space-xl);background:var(--color-bg-card);border:1px solid var(--color-success);border-radius:var(--radius-lg);color:var(--color-success);"></div>
+        </form>
+
+        <div>
+          <h3 style="font-size:1.1rem;margin-bottom:var(--space-lg);">{t('contact.or_contact')}</h3>
+          <div style="display:flex;flex-direction:column;gap:var(--space-lg);">
+            <div class="contact-card">
+              <div class="contact-card-icon">💬</div>
+              <div>
+                <div class="contact-card-label">{t('contact.wechat')}</div>
+                <div class="contact-card-value">17770789050</div>
+              </div>
+            </div>
+            <div class="contact-card">
+              <div class="contact-card-icon">📞</div>
+              <div>
+                <div class="contact-card-label">{t('contact.phone')}</div>
+                <div class="contact-card-value">17770789050</div>
+              </div>
+            </div>
+            <div class="contact-card">
+              <div class="contact-card-icon">📍</div>
+              <div>
+                <div class="contact-card-label">{t('contact.address')}</div>
+                <div class="contact-card-value" style="font-size:0.95rem;">{t('contact.address_detail')}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const form = document.getElementById('inquiryForm');
+    const success = document.getElementById('formSuccess');
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        const resp = await fetch('/api/inquiry', {
+          method: 'POST', body: JSON.stringify(Object.fromEntries(new FormData(form))),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (resp.ok) { show(); }
+      } catch { show(); }
+    });
+    function show() {
+      form.style.display = 'none'; success.style.display = 'block';
+      success.textContent = document.documentElement.lang === 'en'
+        ? "Thank you! We'll get back to you within 24 hours."
+        : '感谢您的询价！我们将在24小时内与您联系。';
+    }
+  </script>
+</BaseLayout>

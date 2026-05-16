@@ -1,0 +1,118 @@
+---
+import { getLang, useTranslations, localizedPath } from '../i18n/utils';
+
+export interface Props {
+  id: string;
+  title: string;
+  client: string;
+  description: string;
+  coverImage: string;
+  order?: number;
+}
+
+const { title, client, description, coverImage, id } = Astro.props;
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+---
+
+<article class="case-card">
+  <a href={localizedPath(Astro.url, `/cases/${id}`)}>
+    <div class="case-card-image">
+      <img
+        src={coverImage}
+        alt={title}
+        loading="lazy"
+      />
+      <div class="case-card-overlay">
+        <span class="case-card-link">{t('home.view_case')} →</span>
+      </div>
+    </div>
+    <div class="case-card-body">
+      <span class="case-card-client">{client}</span>
+      <h3>{title}</h3>
+      <p>{description}</p>
+    </div>
+  </a>
+</article>
+
+<style>
+  .case-card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all var(--transition-base);
+  }
+
+  .case-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-accent-dim);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .case-card-image {
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    background: var(--color-bg-elevated);
+  }
+
+  .case-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+  }
+
+  .case-card:hover .case-card-image img {
+    transform: scale(1.05);
+  }
+
+  .case-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+    display: flex;
+    align-items: flex-end;
+    padding: var(--space-lg);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+  }
+
+  .case-card:hover .case-card-overlay {
+    opacity: 1;
+  }
+
+  .case-card-link {
+    font-size: 0.9rem;
+    color: white;
+    font-weight: 500;
+  }
+
+  .case-card-body {
+    padding: var(--space-lg);
+  }
+
+  .case-card-client {
+    font-size: 0.8rem;
+    color: var(--color-accent);
+    font-weight: 500;
+    margin-bottom: var(--space-xs);
+    display: block;
+  }
+
+  .case-card-body h3 {
+    font-size: 1.05rem;
+    margin-bottom: var(--space-xs);
+  }
+
+  .case-card-body p {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
