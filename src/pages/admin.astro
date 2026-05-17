@@ -25,15 +25,8 @@
       // ── Local: load Decap CMS ──
       loadCMS();
     } else {
-      // ── Production: need GitHub OAuth setup ──
-      status.innerHTML = '生产环境需要配置 GitHub OAuth。<br><br>'
-        + '<b>配置方法：</b><br><br>'
-        + '1. 打开 github.com/settings/developers<br>'
-        + '2. 点 New OAuth App<br>'
-        + '3. Homepage URL: <code>' + location.origin + '</code><br>'
-        + '4. Callback URL: <code>' + location.origin + '/api/callback</code><br>'
-        + '5. 创建后将 Client ID 和 Secret 发给开发者<br><br>'
-        + '完成后刷新本页即可登录 GitHub 编辑内容。';
+      // ── Production: load Decap CMS with GitHub OAuth ──
+      loadCMS();
     }
 
     function loadCMS() {
@@ -44,7 +37,10 @@
         CMS.init({
           load_config_file: false,
           config: {
-            backend: { name: 'proxy', proxy_url: 'http://localhost:8081/api/v1' },
+            ...(isLocal
+              ? { backend: { name: 'proxy', proxy_url: 'http://localhost:8081/api/v1' } }
+              : { backend: { name: 'github', repo: 'bryan78128-alt/niugifts', branch: 'main' } }
+            ),
             publish_mode: 'editorial_workflow',
             media_folder: 'public/images/products',
             public_folder: '/images/products',
