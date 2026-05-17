@@ -1,12 +1,37 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NiuGifts 内容管理</title>
-  <style>body{margin:0}</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NiuGifts 内容管理</title>
+<link rel="stylesheet" href="admin.css">
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
+<div id="app">
+  <aside class="sidebar">
+    <div class="brand">✦ NiuGifts</div>
+    <nav id="fileList"></nav>
+    <div class="sidebar-footer">
+      <a href="/" target="_blank" class="btn-text">查看网站 →</a>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="toolbar" id="toolbar">
+      <h2 id="editorTitle">选择一个文件开始编辑</h2>
+      <div class="toolbar-actions">
+        <span id="saveStatus" class="save-status"></span>
+        <button id="saveBtn" class="btn btn-primary" disabled>💾 保存</button>
+      </div>
+    </header>
+    <div class="editor-body" id="editorBody">
+      <div class="empty-state" id="emptyState">
+        <p>← 从左侧列表选择一个产品或案例</p>
+      </div>
+      <div class="form-panel hidden" id="formPanel"></div>
+    </div>
+  </main>
+</div>
+<script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+<script src="admin.js"></script>
 </body>
 </html>
