@@ -1,5 +1,3 @@
-# NiuGifts Admin Config
-# Local dev: change backend to proxy
 backend:
   name: github
   repo: bryan78128-alt/niugifts
@@ -14,7 +12,6 @@ site_url: https://niugifts.pages.dev
 collections:
   - name: products_zh
     label: 产品 (中文)
-    label_singular: 产品
     folder: src/content/products
     create: true
     slug: "{{id}}"
@@ -23,27 +20,26 @@ collections:
       - { label: 标题, name: title, widget: string }
       - { label: 副标题, name: subtitle, widget: string, required: false }
       - { label: 描述, name: description, widget: text }
-      - { label: 分类, name: category, widget: select, options: ["night-light", "flip-book", "nixie-clock", "neon-sign", "ambient-light"] }
-      - { label: 模板, name: template, widget: select, default: image-only, options: ["image-only", "slideshow", "image-center", "image-left", "image-right"], required: false }
+      - { label: 分类, name: category, widget: select, options: ["night-light","flip-book","nixie-clock","neon-sign","ambient-light"] }
+      - { label: 模板, name: template, widget: select, default: image-only, options: ["image-only","slideshow","image-center","image-left","image-right"], required: false }
       - { label: 产品图片, name: images, widget: list, required: false, field: { label: 图片, name: image, widget: image } }
       - { label: 封面图, name: coverImage, widget: image }
       - { label: 起订量, name: moq, widget: string, required: false }
-      - { label: 价格区间, name: priceRange, widget: string, required: false }
+      - { label: 价格, name: priceRange, widget: string, required: false }
       - { label: 排序, name: order, widget: number, default: 0, value_type: int }
       - { label: 发布, name: published, widget: boolean, default: true }
-      - { label: 产品特点, name: features, widget: list, required: false, field: { label: 特点, name: feature, widget: string } }
-      - label: 规格参数
+      - { label: 特点, name: features, widget: list, required: false, field: { label: 特点, name: feature, widget: string } }
+      - label: 规格
         name: specs
         widget: list
         required: false
         fields:
           - { label: 参数, name: label, widget: string }
           - { label: 值, name: value, widget: string }
-      - { label: 定制选项, name: customization, widget: list, required: false, field: { label: 选项, name: option, widget: string } }
+      - { label: 定制, name: customization, widget: list, required: false, field: { label: 选项, name: option, widget: string } }
 
   - name: products_en
     label: Products (EN)
-    label_singular: Product
     folder: src/content/products_en
     create: true
     slug: "{{id}}"
@@ -52,27 +48,26 @@ collections:
       - { label: Title, name: title, widget: string }
       - { label: Subtitle, name: subtitle, widget: string, required: false }
       - { label: Description, name: description, widget: text }
-      - { label: Category, name: category, widget: select, options: ["night-light", "flip-book", "nixie-clock", "neon-sign", "ambient-light"] }
-      - { label: Template, name: template, widget: select, default: image-only, options: ["image-only", "slideshow", "image-center", "image-left", "image-right"], required: false }
+      - { label: Category, name: category, widget: select, options: ["night-light","flip-book","nixie-clock","neon-sign","ambient-light"] }
+      - { label: Template, name: template, widget: select, default: image-only, options: ["image-only","slideshow","image-center","image-left","image-right"], required: false }
       - { label: Images, name: images, widget: list, required: false, field: { label: Image, name: image, widget: image } }
-      - { label: Cover Image, name: coverImage, widget: image }
+      - { label: Cover, name: coverImage, widget: image }
       - { label: MOQ, name: moq, widget: string, required: false }
-      - { label: Price Range, name: priceRange, widget: string, required: false }
+      - { label: Price, name: priceRange, widget: string, required: false }
       - { label: Order, name: order, widget: number, default: 0, value_type: int }
       - { label: Published, name: published, widget: boolean, default: true }
       - { label: Features, name: features, widget: list, required: false, field: { label: Feature, name: feature, widget: string } }
-      - label: Specifications
+      - label: Specs
         name: specs
         widget: list
         required: false
         fields:
           - { label: Label, name: label, widget: string }
           - { label: Value, name: value, widget: string }
-      - { label: Customization, name: customization, widget: list, required: false, field: { label: Option, name: option, widget: string } }
+      - { label: Customize, name: customization, widget: list, required: false, field: { label: Option, name: option, widget: string } }
 
   - name: cases_zh
     label: 案例 (中文)
-    label_singular: 案例
     folder: src/content/cases
     create: true
     slug: "{{id}}"
@@ -82,15 +77,14 @@ collections:
       - { label: 客户, name: client, widget: string }
       - { label: 描述, name: description, widget: text }
       - { label: 图片, name: images, widget: list, required: false, field: { label: 图片, name: image, widget: image } }
-      - { label: 封面图, name: coverImage, widget: image }
-      - { label: 客户评价, name: testimonial, widget: text, required: false }
+      - { label: 封面, name: coverImage, widget: image }
+      - { label: 评价, name: testimonial, widget: text, required: false }
       - { label: 评价人, name: testimonialAuthor, widget: string, required: false }
       - { label: 排序, name: order, widget: number, default: 0, value_type: int }
       - { label: 发布, name: published, widget: boolean, default: true }
 
   - name: cases_en
     label: Cases (EN)
-    label_singular: Case
     folder: src/content/cases_en
     create: true
     slug: "{{id}}"
@@ -100,7 +94,7 @@ collections:
       - { label: Client, name: client, widget: string }
       - { label: Description, name: description, widget: text }
       - { label: Images, name: images, widget: list, required: false, field: { label: Image, name: image, widget: image } }
-      - { label: Cover Image, name: coverImage, widget: image }
+      - { label: Cover, name: coverImage, widget: image }
       - { label: Testimonial, name: testimonial, widget: text, required: false }
       - { label: Author, name: testimonialAuthor, widget: string, required: false }
       - { label: Order, name: order, widget: number, default: 0, value_type: int }
