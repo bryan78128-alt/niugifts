@@ -35,7 +35,9 @@
       const script = document.createElement('script');
       script.src = 'https://unpkg.com/decap-cms@^3/dist/decap-cms.js';
       script.onload = () => {
-        CMS.init({
+        // Small delay to ensure DOM is ready
+        setTimeout(() => {
+          CMS.init({
           load_config_file: false,
           config: {
             ...(isLocal
@@ -113,6 +115,7 @@
             ]
           }
         });
+        }, 50);
         document.getElementById('app').innerHTML = '';
       };
       document.body.appendChild(script);

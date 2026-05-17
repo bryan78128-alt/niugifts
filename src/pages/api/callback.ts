@@ -1,13 +1,16 @@
-// GitHub OAuth callback for Decap CMS
-// Handles the OAuth code exchange with GitHub
+import type { APIRoute } from 'astro';
 
-export const onRequest = async (context) => {
-  const { request, env } = context;
-  const url = new URL(request.url);
+export const GET: APIRoute = async ({ url, site }) => {
   const code = url.searchParams.get('code');
-
   if (!code) {
-    return new Response('Missing code parameter', { status: 400 });
+    return new Response('Missing code', { status: 400 });
+  }
+
+  const clientId = import.meta.env.GITHUB_CLIENT_ID;
+  const clientSecret = import.meta.env.GITHUB_CLIENT_SECRET;
+
+  if (!clientId || !clientSecret) {
+    return new Response('OAuth not configured', { status: 500 });
   }
 
   try {
@@ -15,23 +18,23 @@ export const onRequest = async (context) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        Accept: 'application/json',
       },
       body: JSON.stringify({
-        client_id: env.GITHUB_CLIENT_ID,
-        client_secret: env.GITHUB_CLIENT_SECRET,
+        client_id: clientId,
+        client_secret: clientSecret,
         code,
       }),
     });
 
-    const data = await resp.json();
+    const data: Record<string, string> = await resp.json();
     const token = data.access_token;
 
     if (!token) {
       return new Response(JSON.stringify(data), { status: 400 });
     }
 
-    // Return the token as a script that sends it back to Decap CMS via postMessage
+    const origin = url.origin;
     return new Response(
       `<html><body><script>
         (function() {
@@ -42,11 +45,9 @@ export const onRequest = async (context) => {
           window.opener.postMessage('authorizing:github', '*');
         })();
       </script></body></html>`,
-      {
-        headers: { 'Content-Type': 'text/html' },
-      }
+      { headers: { 'Content-Type': 'text/html' } }
     );
   } catch (err) {
-    return new Response('OAuth error: ' + err.message, { status: 500 });
+    return new Response('OAuth error', { status: 500 });
   }
 };
