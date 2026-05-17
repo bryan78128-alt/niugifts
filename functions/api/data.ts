@@ -25,7 +25,8 @@ export const onRequest = async (context) => {
     const file = form.get('file');
     const name = form.get('name') || file.name;
     const buffer = await file.arrayBuffer();
-    const content = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+    let binary = ''; new Uint8Array(buffer).forEach(b => binary += String.fromCharCode(b));
+    const content = btoa(binary);
     const mediaPath = `public/images/products/${name}`;
     try {
       const existing = await gh(mediaPath);
@@ -45,7 +46,7 @@ export const onRequest = async (context) => {
       const res = await gh(path);
       if (!res.ok) return new Response('', { status: 200 });
       const data = await res.json();
-      const text = data.content ? atob(data.content.replace(/\n/g, '')) : '';
+      const text = data.content ? decodeURIComponent(escape(atob(data.content.replace(/\n/g, '')))) : '';
       return new Response(text, { headers: { 'content-type': 'text/plain;charset=utf-8' } });
     } catch { return new Response('', { status: 200 }); }
   }
