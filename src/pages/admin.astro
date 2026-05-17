@@ -7,65 +7,6 @@
   <style>body{margin:0}</style>
 </head>
 <body>
-  <script>
-    // ═══ Set config BEFORE loading Decap CMS ═══
-    window.CMS_MANUAL_INIT = true;
-    const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-
-    window.CMS_CONFIG = {
-      backend: isLocal
-        ? { name: 'proxy', proxy_url: 'http://localhost:8081/api/v1' }
-        : { name: 'github', repo: 'bryan78128-alt/niugifts', branch: 'main' },
-      publish_mode: 'editorial_workflow',
-      media_folder: 'public/images/products',
-      public_folder: '/images/products',
-      locale: 'zh',
-      site_url: location.origin,
-      collections: [
-        {name:'products_zh',label:'产品 (中文)',folder:'src/content/products',create:true,slug:'{{id}}',fields:[
-          {label:'ID',name:'id',widget:'string'},{label:'标题',name:'title',widget:'string'},
-          {label:'副标题',name:'subtitle',required:false,widget:'string'},{label:'描述',name:'description',widget:'text'},
-          {label:'分类',name:'category',widget:'select',options:['night-light','flip-book','nixie-clock','neon-sign','ambient-light']},
-          {label:'模板',name:'template',widget:'select',options:['image-only','slideshow','image-center','image-left','image-right'],default:'image-only',required:false},
-          {label:'图片',name:'images',required:false,widget:'list',field:{label:'图',name:'image',widget:'image'}},
-          {label:'封面',name:'coverImage',widget:'image'},{label:'起订量',name:'moq',required:false,widget:'string'},
-          {label:'价格',name:'priceRange',required:false,widget:'string'},{label:'排序',name:'order',widget:'number',default:0,value_type:'int'},
-          {label:'发布',name:'published',widget:'boolean',default:true},
-          {label:'特点',name:'features',required:false,widget:'list',field:{label:'特点',name:'feature',widget:'string'}},
-          {label:'规格',name:'specs',required:false,widget:'list',fields:[{label:'参数',name:'label',widget:'string'},{label:'值',name:'value',widget:'string'}]},
-          {label:'定制',name:'customization',required:false,widget:'list',field:{label:'选项',name:'option',widget:'string'}}
-        ]},
-        {name:'products_en',label:'Products (EN)',folder:'src/content/products_en',create:true,slug:'{{id}}',fields:[
-          {label:'ID',name:'id',widget:'string'},{label:'Title',name:'title',widget:'string'},
-          {label:'Subtitle',name:'subtitle',required:false,widget:'string'},{label:'Description',name:'description',widget:'text'},
-          {label:'Category',name:'category',widget:'select',options:['night-light','flip-book','nixie-clock','neon-sign','ambient-light']},
-          {label:'Template',name:'template',widget:'select',options:['image-only','slideshow','image-center','image-left','image-right'],default:'image-only',required:false},
-          {label:'Images',name:'images',required:false,widget:'list',field:{label:'Img',name:'image',widget:'image'}},
-          {label:'Cover',name:'coverImage',widget:'image'},{label:'MOQ',name:'moq',required:false,widget:'string'},
-          {label:'Price',name:'priceRange',required:false,widget:'string'},{label:'Order',name:'order',widget:'number',default:0,value_type:'int'},
-          {label:'Published',name:'published',widget:'boolean',default:true},
-          {label:'Features',name:'features',required:false,widget:'list',field:{label:'Feature',name:'feature',widget:'string'}},
-          {label:'Specs',name:'specs',required:false,widget:'list',fields:[{label:'Label',name:'label',widget:'string'},{label:'Value',name:'value',widget:'string'}]},
-          {label:'Customize',name:'customization',required:false,widget:'list',field:{label:'Option',name:'option',widget:'string'}}
-        ]},
-        {name:'cases_zh',label:'案例 (中文)',folder:'src/content/cases',create:true,slug:'{{id}}',fields:[
-          {label:'ID',name:'id',widget:'string'},{label:'标题',name:'title',widget:'string'},{label:'客户',name:'client',widget:'string'},
-          {label:'描述',name:'description',widget:'text'},{label:'图片',name:'images',required:false,widget:'list',field:{label:'图',name:'image',widget:'image'}},
-          {label:'封面',name:'coverImage',widget:'image'},{label:'评价',name:'testimonial',required:false,widget:'text'},
-          {label:'评价人',name:'testimonialAuthor',required:false,widget:'string'},{label:'排序',name:'order',widget:'number',default:0,value_type:'int'},
-          {label:'发布',name:'published',widget:'boolean',default:true}
-        ]},
-        {name:'cases_en',label:'Cases (EN)',folder:'src/content/cases_en',create:true,slug:'{{id}}',fields:[
-          {label:'ID',name:'id',widget:'string'},{label:'Title',name:'title',widget:'string'},{label:'Client',name:'client',widget:'string'},
-          {label:'Description',name:'description',widget:'text'},{label:'Images',name:'images',required:false,widget:'list',field:{label:'Img',name:'image',widget:'image'}},
-          {label:'Cover',name:'coverImage',widget:'image'},{label:'Testimonial',name:'testimonial',required:false,widget:'text'},
-          {label:'Author',name:'testimonialAuthor',required:false,widget:'string'},{label:'Order',name:'order',widget:'number',default:0,value_type:'int'},
-          {label:'Published',name:'published',widget:'boolean',default:true}
-        ]}
-      ]
-    };
-  </script>
   <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
-  <script>CMS.init({load_config_file:false,config:CMS_CONFIG})</script>
 </body>
 </html>
