@@ -31,6 +31,7 @@
 
     function loadCMS() {
       status.textContent = '加载 CMS...';
+      window.CMS_MANUAL_INIT = true;
       const script = document.createElement('script');
       script.src = 'https://unpkg.com/decap-cms@^3/dist/decap-cms.js';
       script.onload = () => {
