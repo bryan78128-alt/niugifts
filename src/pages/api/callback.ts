@@ -1,16 +1,20 @@
 import type { APIRoute } from 'astro';
 
-export const GET: APIRoute = async ({ url, site }) => {
+export const prerender = false;
+
+export const GET: APIRoute = async ({ url, request }) => {
   const code = url.searchParams.get('code');
   if (!code) {
     return new Response('Missing code', { status: 400 });
   }
 
-  const clientId = import.meta.env.GITHUB_CLIENT_ID;
-  const clientSecret = import.meta.env.GITHUB_CLIENT_SECRET;
+  // @ts-ignore - Cloudflare runtime env
+  const clientId = import.meta.env?.GITHUB_CLIENT_ID || (typeof process !== 'undefined' && process.env?.GITHUB_CLIENT_ID);
+  // @ts-ignore
+  const clientSecret = import.meta.env?.GITHUB_CLIENT_SECRET || (typeof process !== 'undefined' && process.env?.GITHUB_CLIENT_SECRET);
 
   if (!clientId || !clientSecret) {
-    return new Response('OAuth not configured', { status: 500 });
+    return new Response('OAuth not configured on server. Add GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET to Pages environment variables.', { status: 500 });
   }
 
   try {
@@ -27,7 +31,7 @@ export const GET: APIRoute = async ({ url, site }) => {
       }),
     });
 
-    const data: Record<string, string> = await resp.json();
+    const data = await resp.json() as Record<string, string>;
     const token = data.access_token;
 
     if (!token) {
@@ -48,6 +52,6 @@ export const GET: APIRoute = async ({ url, site }) => {
       { headers: { 'Content-Type': 'text/html' } }
     );
   } catch (err) {
-    return new Response('OAuth error', { status: 500 });
+    return new Response('OAuth error: ' + (err instanceof Error ? err.message : String(err)), { status: 500 });
   }
 };
